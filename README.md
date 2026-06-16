@@ -4,6 +4,10 @@ Welcome to the AI-powered economic forecasting system for Indian regions. This p
 
 It predicts the **Estimated Unemployment Rate** based on regions and economic indicators.
 
+## 🚀 Live Demo
+
+**[https://unemployment-analysis-with-python-ivory.vercel.app/](https://unemployment-analysis-with-python-ivory.vercel.app/)**
+
 ## Architecture
 
 ```mermaid
