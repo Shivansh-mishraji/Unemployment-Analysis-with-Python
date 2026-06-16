@@ -4,11 +4,11 @@ services:
   backend:
     build:
       context: .
-      dockerfile: backend/Dockerfile
+      dockerfile: api/Dockerfile
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app/backend
+      - ./api:/app/api
 
   frontend:
     build:

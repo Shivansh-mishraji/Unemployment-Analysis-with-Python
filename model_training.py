@@ -77,7 +77,7 @@ def main():
     
     # Save the pipeline
     print("Saving model to model.joblib...")
-    joblib.dump(clf, 'backend/model.joblib')
+    joblib.dump(clf, 'api/model.joblib')
     print("Done!")
 
 if __name__ == "__main__":
