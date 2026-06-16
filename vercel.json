@@ -1,9 +1,10 @@
 {
-  "buildCommand": "cd frontend && npm install && npm run build && cd .. && mkdir -p public && cp -r frontend/dist/* public/",
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/dist",
   "rewrites": [
     {
       "source": "/predict(.*)",
-      "destination": "/api/index.py"
+      "destination": "/api/main.py"
     },
     {
       "source": "/(.*)",
