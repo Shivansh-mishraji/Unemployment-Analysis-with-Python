@@ -35,7 +35,7 @@ function App() {
     
     try {
       // Fetch uses the relative path /predict, which will be proxied in dev, and matched by Vercel routes in prod
-      const response = await fetch("/predict", {
+      const response = await fetch("/api/predict", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
