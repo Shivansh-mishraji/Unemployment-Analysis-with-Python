@@ -54,7 +54,7 @@ graph LR
 
 2. **Start the Backend**:
    ```bash
-   uvicorn backend.main:app --reload
+   uvicorn api.main:app --reload
    ```
 
 3. **Start the Frontend**:
@@ -64,12 +64,19 @@ graph LR
    npm run dev
    ```
 
+### Vercel Deployment
+
+This project is fully configured for zero-configuration deployment on Vercel:
+1. Push the repository to GitHub.
+2. Import the project in Vercel.
+3. Vercel will automatically detect the `package.json` to build the React frontend into `public/`, and will automatically serve the FastAPI backend from the `api/` directory.
+
 ## Technologies Used
 
 - **Python**: Pandas, Scikit-Learn
 - **Backend**: FastAPI, Uvicorn, Pydantic
 - **Frontend**: React, Vite, Vanilla CSS
-- **DevOps**: Docker, Docker Compose
+- **DevOps**: Docker, Docker Compose, Vercel
 
 ## License
 

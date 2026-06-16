@@ -51,6 +51,14 @@ Vite uses native ES modules, providing incredibly fast hot module replacement (H
 **Answer:**
 Dockerizing the application solves the "it works on my machine" problem. By defining the environment in `Dockerfile`s and linking them with `docker-compose.yml`, any developer (or CI/CD pipeline) can spin up the exact same environment with a single command (`docker-compose up`). It isolates dependencies and makes the transition to cloud deployment (like AWS ECS or Kubernetes) trivial.
 
+**Question:** *How is the application deployed to production?*
+
+**Answer:**
+The application is deployed as a monolithic repository (Monorepo) on **Vercel** using their Zero-Configuration capabilities. 
+- The root `package.json` instructs Vercel to engage its Node.js builder. It compiles the Vite/React frontend and deposits the static assets into a `public/` directory, which Vercel natively serves at the root (`/`) of the domain.
+- The Python backend resides in the `api/` directory (`api/main.py`). Vercel's Serverless environment automatically detects this directory and converts the FastAPI application into a highly scalable Python Serverless Function mapped to `/api/main`.
+- Vercel rewrites (`vercel.json`) are used to seamlessly route frontend API requests (`/predict`) to the Serverless Function, and handle Single Page Application (SPA) routing fallbacks. This setup completely eliminates the need for managing underlying infrastructure.
+
 ## 4. Potential Cross-Questioning (Handling Edge Cases)
 
 **Question:** *What happens if the model receives a `Region` it has never seen before?*
