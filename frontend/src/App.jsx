@@ -1,121 +1,152 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+
+const REGIONS = [
+  "Andhra Pradesh", "Assam", "Bihar", "Chhattisgarh", "Delhi", "Goa", "Gujarat", 
+  "Haryana", "Himachal Pradesh", "Jammu & Kashmir", "Jharkhand", "Karnataka", 
+  "Kerala", "Madhya Pradesh", "Maharashtra", "Meghalaya", "Odisha", "Puducherry", 
+  "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", 
+  "Uttar Pradesh", "Uttarakhand", "West Bengal"
+];
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [formData, setFormData] = useState({
+    Region: REGIONS[0],
+    Employed: 10000000,
+    Labour_participation: 40.0,
+    Area: "Rural"
+  });
+  
+  const [prediction, setPrediction] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    
+    try {
+      // Assuming backend runs on port 8000
+      const response = await fetch("http://localhost:8000/predict", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          Region: formData.Region,
+          Frequency: " Monthly",
+          Employed: parseFloat(formData.Employed),
+          Labour_participation: parseFloat(formData.Labour_participation),
+          Area: formData.Area,
+          Month: 6,
+          Year: 2020
+        })
+      });
+      
+      if (!response.ok) throw new Error("Failed to fetch prediction");
+      
+      const data = await response.json();
+      setPrediction(data.Unemployment_rate);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="app-container">
+      <div className="header">
+        <h1>Unemployment Predictor</h1>
+        <p>AI-powered economic forecasting for Indian regions</p>
+      </div>
 
-      <div className="ticks"></div>
+      <div className="glass-card">
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="Region">Region</label>
+            <select 
+              id="Region" 
+              name="Region" 
+              className="form-control" 
+              value={formData.Region}
+              onChange={handleChange}
+            >
+              {REGIONS.map(region => (
+                <option key={region} value={region}>{region}</option>
+              ))}
+            </select>
+          </div>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+          <div className="form-group">
+            <label htmlFor="Employed">Estimated Employed Workforce</label>
+            <input 
+              type="number" 
+              id="Employed" 
+              name="Employed" 
+              className="form-control" 
+              value={formData.Employed}
+              onChange={handleChange}
+              min="0"
+              required
+            />
+          </div>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+          <div className="form-group">
+            <label htmlFor="Labour_participation">Labour Participation Rate (%)</label>
+            <input 
+              type="number" 
+              id="Labour_participation" 
+              name="Labour_participation" 
+              className="form-control" 
+              value={formData.Labour_participation}
+              onChange={handleChange}
+              step="0.01"
+              min="0"
+              max="100"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="Area">Area Type</label>
+            <select 
+              id="Area" 
+              name="Area" 
+              className="form-control" 
+              value={formData.Area}
+              onChange={handleChange}
+            >
+              <option value="Rural">Rural</option>
+              <option value="Urban">Urban</option>
+            </select>
+          </div>
+
+          <button type="submit" className="submit-btn" disabled={loading}>
+            {loading ? "Analyzing..." : "Predict Unemployment Rate"}
+          </button>
+        </form>
+
+        {error && <div className="error-message">{error}</div>}
+
+        {prediction !== null && !error && (
+          <div className="result-section">
+            <h2>Estimated Unemployment Rate</h2>
+            <div className="result-value">
+              {prediction.toFixed(2)}%
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   )
 }
 
