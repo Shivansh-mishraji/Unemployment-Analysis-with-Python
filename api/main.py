@@ -38,7 +38,11 @@ class PredictionResponse(BaseModel):
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the Unemployment Analysis API. Use /predict to get predictions."}
+    return {"message": "Unemployment Analysis API is running.", "status": "ok"}
+
+@app.get("/health")
+def health():
+    return {"status": "ok", "model_loaded": model is not None}
 
 @app.post("/predict", response_model=PredictionResponse)
 def predict(request: PredictionRequest):
