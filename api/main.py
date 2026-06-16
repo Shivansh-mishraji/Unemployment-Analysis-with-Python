@@ -36,14 +36,17 @@ class PredictionRequest(BaseModel):
 class PredictionResponse(BaseModel):
     Unemployment_rate: float
 
+@app.get("/api")
 @app.get("/")
 def read_root():
     return {"message": "Unemployment Analysis API is running.", "status": "ok"}
 
+@app.get("/api/health")
 @app.get("/health")
 def health():
     return {"status": "ok", "model_loaded": model is not None}
 
+@app.post("/api/predict", response_model=PredictionResponse)
 @app.post("/predict", response_model=PredictionResponse)
 def predict(request: PredictionRequest):
     if model is None:
