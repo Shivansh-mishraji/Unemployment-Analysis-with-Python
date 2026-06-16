@@ -5,6 +5,10 @@
     {
       "source": "/predict(.*)",
       "destination": "/api/index.py"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
