@@ -18,7 +18,7 @@ app.add_middleware(
 
 # Load the trained model pipeline
 # We assume the backend is run from the project root or the model is placed correctly
-MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "model.joblib")
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "model.joblib")
 if os.path.exists(MODEL_PATH):
     model = joblib.load(MODEL_PATH)
 else:

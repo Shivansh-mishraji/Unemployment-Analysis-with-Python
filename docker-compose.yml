@@ -9,7 +9,6 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app/backend
-      - ./model.joblib:/app/model.joblib
 
   frontend:
     build:
