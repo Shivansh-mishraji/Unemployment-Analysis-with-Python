@@ -34,8 +34,8 @@ function App() {
     setError(null);
     
     try {
-      // Assuming backend runs on port 8000
-      const response = await fetch("http://localhost:8000/predict", {
+      // Fetch uses the relative path /predict, which will be proxied in dev, and matched by Vercel routes in prod
+      const response = await fetch("/predict", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
